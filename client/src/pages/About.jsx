@@ -16,7 +16,7 @@ import Aman from "../assets/aman.png"
 import OM from "../assets/OM.png"
 import Dhruvi from "../assets/Dhruvi.jpg"
 import Lovepreet from "../assets/lovepreet.jpeg"
-
+import sumitkumarsonkar from "../assets/sumikumarsonkar.png"
 
 
 const profiles = [
@@ -222,10 +222,10 @@ const About = () => {
             <div className="w-full flex justify-center items-center flex-wrap gap-8 mb-12">
               {/* Dean's Card */}
               <ProfileCard
-                name="Dr. Manish Vashistha"
+                name="Dr. Sumit Kumar Sonkar"
                 occupation="Dean, Alumni and Industry Outreach"
-                image={Dean} // Using the same image as Associate Dean for now
-                linkedin="https://www.linkedin.com/in/example-dean/" // Placeholder
+                image={sumitkumarsonkar} // Using the same image as Associate Dean for now
+                linkedin="https://www.linkedin.com/in/sumit-sonkar-023721273/" // Placeholder
                 email="dean@iiitkota.ac.in" // Placeholder
               />
               {/* Associate Dean's Card */}
