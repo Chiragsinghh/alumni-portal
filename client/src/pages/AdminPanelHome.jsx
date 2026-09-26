@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Logo from "../assets/iiitkotalogo.png";
 import { NewsList } from "./AdminNews";
 import { AdminEvents } from "./AdminEvents";
 import { AlumniList } from "./AdminAlumni";
-axios.defaults.withCredentials = true;
 import axios from "axios";
+axios.defaults.withCredentials = true;
  
 let APIHOST = import.meta.env.VITE_API_URL
 
@@ -27,8 +28,10 @@ function TabButton({ label, isActive, onClick }) {
 
 
 export default function AdminPanelHome() {
+  const navigate = useNavigate();
   const [page, setPage] = useState("Home");
-  const pages = ["Home", "News", "Events"];
+  
+  const pages = ["Home", "Students", "Blogs", "News", "Events", "Stories"];
 
   const [auth, setAuth] = useState(false);
   const [key, setKey] = useState("");
@@ -37,7 +40,7 @@ export default function AdminPanelHome() {
 
   const checkAuth = async () => {
     try {
-      const res = await axios.get(`${APIHOST}/api/admin/protected`);
+      const res = await axios.get(`${APIHOST}/api/admin/protected` );
       setAuth(res.data.access);
     } catch {
       setAuth(false);
@@ -53,10 +56,12 @@ export default function AdminPanelHome() {
       if (res.data.success) {
         await checkAuth();
       } else {
-        alert(  res.data.message);
+        alert(res.data.message);
       }
-    } catch {
-      alert("Login Failed");
+    } catch (error) { 
+      console.error(error)
+
+      alert("Login Failed" );
     }
   };
 
@@ -126,7 +131,20 @@ export default function AdminPanelHome() {
 
       <div className="flex bg-white border-t-2 flex-wrap gap-1 gap-y-4 p-4">
         {pages.map((pg) => (
-          <TabButton key={pg} label={pg} isActive={page === pg} onClick={() => setPage(pg)} />
+          <TabButton
+            key={pg}
+            label={pg}
+            isActive={page === pg}
+            onClick={() => {
+              if (pg === "Students") {
+                navigate("/admin/students");
+              } else if (pg === "Blogs") {
+                navigate("/admin/blogs");
+              } else {
+                setPage(pg);
+              }
+            }}
+          />
         ))}
         <div className="ml-auto flex gap-2 items-center mr-3">
 
@@ -141,6 +159,7 @@ export default function AdminPanelHome() {
       {page === "Home" && <AlumniList />}
       {page === "News" && <NewsList />}
       {page === "Events" && <AdminEvents />}
+      {page === "Stories" && <AdminStories />}
     </div>
   );
 }

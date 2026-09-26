@@ -2,25 +2,32 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-// Create a transporter object using SMTP transport
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+console.log("EMAIL_USER:", process.env.EMAIL_USER);
+console.log("EMAIL_PASS EXISTS:", !!process.env.EMAIL_PASS);
+
+const getTransporter = () => {
+  const user = (process.env.EMAIL_USER || process.env.MAIL_USER || '').trim();
+  const pass = (process.env.EMAIL_PASS || process.env.MAIL_PASS || '').replace(/\s+/g, '');
+  return nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: { user, pass },
+    tls: { rejectUnauthorized: false }
+  });
+};
 
 // Function to send verification email
 const sendVerificationEmail = (to, subject, html) => {
+  const user = (process.env.EMAIL_USER || process.env.MAIL_USER || '').trim();
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: user,
     to,
     subject,
     html,
   };
 
-  return transporter.sendMail(mailOptions);
+  return getTransporter().sendMail(mailOptions);
 };
 
 // Function to send welcome email
@@ -56,7 +63,73 @@ Email: chetna.ece@iiitkota.ac.in
 Contact No.: 9549650234`,
   };
 
-  return transporter.sendMail(mailOptions);
+  return getTransporter().sendMail(mailOptions);
 };
 
-module.exports = { sendEmail, sendVerificationEmail };
+const sendReferralNotificationEmail = ({
+  alumniEmail,
+  alumniName,
+  studentName,
+  company,
+  jobLink,
+  jobId,
+  resumeUrl,
+  studentMessage,
+  dashboardUrl
+}) => {
+  const optionalSections = [];
+  if (jobLink?.trim()) {
+    optionalSections.push(`Job Link:\n${jobLink.trim()}`);
+  }
+  if (jobId?.trim()) {
+    optionalSections.push(`Job ID:\n${jobId.trim()}`);
+  }
+  if (studentMessage?.trim()) {
+    optionalSections.push(`Student Message:\n${studentMessage.trim()}`);
+  }
+
+  const optionalBlock = optionalSections.length
+    ? `\n\n${optionalSections.join('\n\n')}`
+    : '';
+
+  const mailOptions = {
+    from: (process.env.EMAIL_USER || process.env.MAIL_USER || '').trim(),
+    to: alumniEmail,
+    subject: `New Referral Request Assigned - ${company}`,
+    text: `Dear ${alumniName},
+
+A new referral request has been assigned to you through the IIIT Kota Alumni Referral Portal.
+
+Below are the details of the request:
+
+Student Name: ${studentName}
+Target Company: ${company}
+
+Resume Link:
+${(resumeUrl || '').replace(/^http:(?!\/\/(localhost|127\.0\.0\.1))/, 'https:')}${optionalBlock}
+
+You can review and respond to this referral request directly from your referral dashboard:
+
+${dashboardUrl}
+
+We sincerely appreciate your continued support in helping fellow IIIT Kota students and alumni through mentorship and referral opportunities.
+
+Your contribution plays an important role in strengthening the IIIT Kota alumni network and supporting the professional growth of our students.
+
+Best regards,
+
+Chetna Sharma, PhD
+Associate Dean, Alumni and Industry Outreach
+Assistant Professor, ECE Department
+Indian Institute of Information Technology, Kota
+(An Institute of National Importance established by MoE, Govt of India)
+Email: chetna.ece@iiitkota.ac.in
+Contact No.: 9549650234`
+  };
+
+  return getTransporter().sendMail(mailOptions);
+};
+  
+
+
+module.exports = { sendEmail, sendVerificationEmail, sendReferralNotificationEmail };

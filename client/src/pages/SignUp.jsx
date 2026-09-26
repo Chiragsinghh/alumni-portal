@@ -76,6 +76,8 @@ const SignUp = () => {
         branch = "CSE";
       } else if (branchCode === "kuec") {
         branch = "ECE";
+      } else if (branchCode === "kuad") {
+        branch = "AIDE";
       }
 
       // Calculate the graduation year (4 years after the start year)
@@ -229,6 +231,24 @@ const SignUp = () => {
       <h2 className="text-3xl text-center md:text-start font-bold text-[#19194D] mb-6">
         Alumni Details <span className="text-sm text-gray-500">(1/4)</span>
       </h2>
+
+      {/* Toggle Switch to choose between Alumni and Student */}
+      <div className="flex bg-gray-100 p-1 rounded-xl mb-6 w-full md:w-4/5">
+        <button
+          type="button"
+          className="flex-1 py-2 text-center text-sm font-semibold rounded-lg transition-all bg-[#0E407C] text-white shadow"
+        >
+          Alumni
+        </button>
+        <button
+          type="button"
+          className="flex-1 py-2 text-center text-sm font-semibold rounded-lg transition-all text-gray-500 hover:text-gray-800"
+          onClick={() => navigate('/student-signup')}
+        >
+          Student
+        </button>
+      </div>
+
       <div className="mb-6 w-full flex items-center max-md:justify-center">
         <PersonIcon className="mr-2 text-[#19194D]" />
         <input
@@ -472,6 +492,7 @@ const SignUp = () => {
             <input
               type="file"
               id="file-input"
+              name="profilePicture"
               className="absolute inset-0 opacity-0 cursor-pointer"
               onChange={handleFileChange}
             />
