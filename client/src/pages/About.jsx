@@ -12,11 +12,11 @@ import Nitesh from "../assets/niteshDixit.png";
 import Chirag from "../assets/Chirag.jpg";
 import Chandan from "../assets/Chandan.jpg";
 import Kritharth from "../assets/Kritarth.jpg";
-import Aman from "../assets/aman.png"
-import OM from "../assets/OM.png"
-import Dhruvi from "../assets/Dhruvi.jpg"
-import Lovepreet from "../assets/lovepreet.jpeg"
-import sumitkumarsonkar from "../assets/sumikumarsonkar.png"
+import Aman from "../assets/aman.png";
+import OM from "../assets/OM.png";
+import Dhruvi from "../assets/Dhruvi.jpg";
+import Lovepreet from "../assets/lovepreet.jpeg";
+import sumitkumarsonkar from "../assets/sumikumarsonkar.png";
 
 
 const seniorCoordinators = [
